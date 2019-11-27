@@ -5,12 +5,12 @@ export default Component.extend({
   tagName: "",
 
   bccAvailable: computed(
-    "model.creatingPrivateMessage",
-    "model.targetUsernames",
+    "creatingPrivateMessage",
+    "targetUsernames",
     function() {
       return (
-        this.model.creatingPrivateMessage &&
-        (this.model.targetUsernames || "").split(",").length > 1
+        this.creatingPrivateMessage &&
+        (this.targetUsernames || "").split(",").length > 1
       );
     }
   )
