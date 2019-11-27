@@ -1,0 +1,4 @@
+plugins:
+  bcc_enabled:
+    default: false
+    client: true
