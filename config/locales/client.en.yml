@@ -1,0 +1,4 @@
+en:
+  js:
+    discourse_bcc:
+      use_bcc: "Send an individual personal message to each recipient"

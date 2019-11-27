@@ -1,0 +1,7 @@
+{{#if model.creatingPrivateMessage}}
+  <div class='bcc-checkbox'>
+    <label>
+      {{input type="checkbox" checked=model.use_bcc}} {{i18n "discourse_bcc.use_bcc"}}
+    </label>
+  </div>
+{{/if}}
