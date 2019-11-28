@@ -9,6 +9,7 @@ export default {
     let composer = container.factoryFor("model:composer");
     if (composer) {
       composer.class.serializeOnCreate("use_bcc");
+      composer.class.serializeToDraft("use_bcc");
     }
 
     let adapter = container.lookup("adapter:post");
