@@ -9,22 +9,24 @@
 enabled_site_setting :bcc_enabled
 
 after_initialize do
-  require_dependency 'posts_controller'
+  require_relative "app/jobs/bcc_post"
 
   Discourse::Application.routes.append do
     post '/posts/bcc' => 'posts#bcc', constraints: StaffConstraint.new
   end
 
   # add_to_class doesn't support blocks
-  class ::PostsController < ApplicationController
-    protected
-    def render_bcc(status:)
-      result = NewPostResult.new(:bcc, status)
-      yield result if block_given?
-      render(
-        json: serialize_data(result, NewPostResultSerializer, root: false),
-        status: result.success? ? 200 : 422
-      )
+  reloadable_patch do
+    class ::PostsController < ApplicationController
+      protected
+      def render_bcc(status:)
+        result = NewPostResult.new(:bcc, status)
+        yield result if block_given?
+        render(
+          json: serialize_data(result, NewPostResultSerializer, root: false),
+          status: result.success? ? 200 : 422
+        )
+      end
     end
   end
 
@@ -48,6 +50,11 @@ after_initialize do
       return render_bcc(status: false) { |result| result.add_error(post.errors[:raw]) }
     end
 
-    return render_bcc(status: true)
+    Jobs.enqueue(:bcc_post, user_id: current_user.id, create_params: @manager_params)
+
+    return render_bcc(status: true) do |result|
+      result.route_to = "/u/#{current_user.username_lower}/messages"
+      result.message = I18n.t("bcc.messages_queued")
+    end
   end
 end

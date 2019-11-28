@@ -36,6 +36,7 @@ describe PostsController do
 
     it 'can report validation errors' do
       post '/posts/bcc.json', params: create_params.merge(raw: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+      expect(Jobs::BccPost.jobs.length).to eq(0)
       expect(response.code).to eq('422')
       json = JSON.parse(response.body)
       expect(json['errors']).to be_present
@@ -43,6 +44,7 @@ describe PostsController do
 
     it "returns an error if there aren't two usernames at least" do
       post '/posts/bcc.json', params: create_params.merge(target_usernames: 'test')
+      expect(Jobs::BccPost.jobs.length).to eq(0)
       expect(response.code).to eq('422')
       json = JSON.parse(response.body)
       expect(json['errors']).to be_present
@@ -50,6 +52,7 @@ describe PostsController do
 
     it "returns an error if it isn't a private message" do
       post '/posts/bcc.json', params: create_params.merge(archetype: Archetype.default)
+      expect(Jobs::BccPost.jobs.length).to eq(0)
       expect(response.code).to eq('422')
       json = JSON.parse(response.body)
       expect(json['errors']).to be_present
@@ -57,7 +60,11 @@ describe PostsController do
 
     it 'succeeds' do
       post '/posts/bcc.json', params: create_params
+      expect(Jobs::BccPost.jobs.length).to eq(1)
       expect(response.code).to eq('200')
+      json = JSON.parse(response.body)
+      expect(json['route_to']).to be_present
+      expect(json['message']).to be_present
     end
   end
 end

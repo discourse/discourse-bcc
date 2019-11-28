@@ -4,3 +4,4 @@ en:
   bcc:
     too_few_users: "You must send the personal message to at least two participants"
     pm_required: "You can only use this endpoint for private messages"
+    messages_queued: "Your personal messages are currently being sent."
