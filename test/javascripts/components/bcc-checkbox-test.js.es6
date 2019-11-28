@@ -4,7 +4,9 @@ moduleForComponent("bcc-checkbox", { integration: true });
 
 componentTest("it doesn't show up by default", {
   template: "{{bcc-checkbox}}",
-
+  beforeEach() {
+    this.currentUser.set("moderator", true);
+  },
   test(assert) {
     assert.ok(find(".bcc-checkbox").length === 0);
   }
@@ -13,7 +15,19 @@ componentTest("it doesn't show up by default", {
 componentTest("it doesn't show up with one username", {
   template: `{{bcc-checkbox creatingPrivateMessage=true targetUsernames="evil"}}`,
 
+  beforeEach() {
+    this.currentUser.set("moderator", true);
+  },
+
   test(assert) {
+    assert.ok(find(".bcc-checkbox").length === 0);
+  }
+});
+
+componentTest("doesn't show up for non-staff", {
+  template: `{{bcc-checkbox creatingPrivateMessage=true targetUsernames="evil,trout"}}`,
+
+  async test(assert) {
     assert.ok(find(".bcc-checkbox").length === 0);
   }
 });
@@ -23,6 +37,7 @@ componentTest(
   {
     beforeEach() {
       this.set("changeMe", false);
+      this.currentUser.set("moderator", true);
     },
 
     template: `{{bcc-checkbox checked=changeMe creatingPrivateMessage=true targetUsernames="evil,trout"}}`,

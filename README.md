@@ -7,3 +7,5 @@ This is similar to using the BCC feature in email, where each recipient will rec
 their own copy of the email and will not be able to see replies from other users.
 
 To use, enable the `bcc enabled` site setting.
+
+The functionality is currently restricted to staff users.

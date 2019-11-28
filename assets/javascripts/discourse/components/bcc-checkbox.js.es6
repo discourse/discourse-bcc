@@ -9,6 +9,7 @@ export default Component.extend({
     "targetUsernames",
     function() {
       return (
+        this.currentUser.staff &&
         this.creatingPrivateMessage &&
         (this.targetUsernames || "").split(",").length > 1
       );
