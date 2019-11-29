@@ -66,5 +66,24 @@ describe PostsController do
       expect(json['route_to']).to be_present
       expect(json['message']).to be_present
     end
+
+    it 'expands groups to users' do
+      group = Fabricate(:group, messageable_level: Group::ALIAS_LEVELS[:everyone])
+      user0 = Fabricate(:user)
+      user1 = Fabricate(:user)
+      user2 = Fabricate(:user)
+
+      GroupUser.create(group: group, user: user0)
+      GroupUser.create(group: group, user: user1)
+
+      post '/posts/bcc.json', params: create_params.merge(
+        target_usernames: "#{group.name},#{user2.username}"
+      )
+      expect(response.code).to eq('200')
+      job = Jobs::BccPost.jobs[0]
+      expect(job).to be_present
+      usernames = job['args'].first['create_params']['target_usernames'].split(',')
+      expect(usernames).to match_array([user0.username, user1.username, user2.username])
+    end
   end
 end

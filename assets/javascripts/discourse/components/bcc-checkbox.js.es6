@@ -11,7 +11,7 @@ export default Component.extend({
       return (
         this.currentUser.staff &&
         this.creatingPrivateMessage &&
-        (this.targetUsernames || "").split(",").length > 1
+        (this.targetUsernames || "").length > 0
       );
     }
   )

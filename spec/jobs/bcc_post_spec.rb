@@ -25,6 +25,7 @@ describe ::Jobs::BccPost do
     before do
       SiteSetting.bcc_enabled = true
     end
+
     it "will send messages to each user" do
       topic_count = Topic.count
       ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params)

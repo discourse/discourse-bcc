@@ -37,10 +37,19 @@ after_initialize do
       return render_bcc(status: false) { |result| result.add_error(I18n.t("bcc.pm_required")) }
     end
 
-    usernames = (@manager_params[:target_usernames] || '').split(',')
+    usernames = Set.new((@manager_params[:target_usernames] || '').split(','))
+
+    # Expand any groups
+    group_names = (@manager_params.delete(:target_group_names) || '').split(',')
+    Group.where(name: group_names).includes(group_users: :user).each do |g|
+      g.group_users.each { |gu| usernames << gu.user.username }
+    end
+
     if usernames.size < 2
       return render_bcc(status: false) { |result| result.add_error(I18n.t("bcc.too_few_users")) }
     end
+
+    @manager_params[:target_usernames] = usernames.to_a.join(',')
 
     validator = PostValidator.new
     post = Post.new(raw: @manager_params[:raw], user: current_user)
