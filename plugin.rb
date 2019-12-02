@@ -64,7 +64,7 @@ after_initialize do
     Jobs.enqueue(:bcc_post, user_id: current_user.id, create_params: @manager_params)
 
     return render_bcc(status: true) do |result|
-      result.route_to = "/u/#{current_user.username_lower}/messages"
+      result.route_to = "/u/#{current_user.username_lower}/messages/sent"
       result.message = I18n.t("bcc.messages_queued")
     end
   end
