@@ -7,12 +7,12 @@ describe ::Jobs::BccPost do
   fab!(:user1) { Fabricate(:user) }
 
   let(:create_params) do
-    HashWithIndifferentAccess.new({
+    HashWithIndifferentAccess.new(
       "raw" => "this is the content I want to send",
       "title" => "this is the title of the PM I want to send",
       "archetype" => Archetype.private_message,
       target_usernames: "#{user0.username},#{user1.username}"
-    })
+    )
   end
 
   it "does nothing when disabled" do

@@ -73,6 +73,7 @@ describe PostsController do
       user1 = Fabricate(:user)
       user2 = Fabricate(:user)
 
+      GroupUser.create(group: group, user: moderator)
       GroupUser.create(group: group, user: user0)
       GroupUser.create(group: group, user: user1)
 

@@ -42,7 +42,9 @@ after_initialize do
     # Expand any groups
     group_names = (@manager_params.delete(:target_group_names) || '').split(',')
     Group.where(name: group_names).includes(group_users: :user).each do |g|
-      g.group_users.each { |gu| usernames << gu.user.username }
+      g.group_users.each do |gu|
+        usernames << gu.user.username unless gu.user_id == current_user.id
+      end
     end
 
     if usernames.size < 2
