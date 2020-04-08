@@ -6,12 +6,12 @@ export default Component.extend({
 
   bccAvailable: computed(
     "creatingPrivateMessage",
-    "targetUsernames",
+    "targetRecipients",
     function() {
       return (
         this.currentUser.staff &&
         this.creatingPrivateMessage &&
-        (this.targetUsernames || "").split(",").length > 1
+        (this.targetRecipients || "").split(",").length > 1
       );
     }
   )

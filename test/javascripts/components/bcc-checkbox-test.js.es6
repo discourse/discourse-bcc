@@ -13,7 +13,7 @@ componentTest("it doesn't show up by default", {
 });
 
 componentTest("doesn't show up for non-staff", {
-  template: `{{bcc-checkbox creatingPrivateMessage=true targetUsernames="evil,trout"}}`,
+  template: `{{bcc-checkbox creatingPrivateMessage=true targetRecipients="evil,trout"}}`,
 
   async test(assert) {
     assert.ok(find(".bcc-checkbox").length === 0);
@@ -26,7 +26,7 @@ componentTest("it shows up if a private message with at least 1 username", {
     this.currentUser.set("moderator", true);
   },
 
-  template: `{{bcc-checkbox checked=changeMe creatingPrivateMessage=true targetUsernames="evil,trout"}}`,
+  template: `{{bcc-checkbox checked=changeMe creatingPrivateMessage=true targetRecipients="evil,trout"}}`,
 
   async test(assert) {
     assert.ok(!this.get("changeMe"));
