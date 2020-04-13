@@ -9,10 +9,19 @@ class ::Jobs::BccPost < ::Jobs::Base
 
     create_params = args[:create_params]
     create_params[:skip_validations] = true
-    split_usernames = create_params.delete(:target_usernames).split(',')
 
-    split_usernames.each do |username|
-      creator = PostCreator.new(sender, create_params.merge(target_usernames: username))
+    split_usernames = (create_params.delete(:target_usernames) || '').split(',')
+    split_emails = (create_params.delete(:target_emails) || '').split(',')
+
+    send_to(split_usernames, :target_usernames, create_params, sender)
+    send_to(split_emails, :target_emails, create_params, sender)
+  end
+
+  private
+
+  def send_to(targets, targets_key, params, sender)
+    targets.each do |target|
+      creator = PostCreator.new(sender, params.merge(Hash[targets_key, target]))
       creator.create
     end
   end

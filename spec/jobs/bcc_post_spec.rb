@@ -31,6 +31,30 @@ describe ::Jobs::BccPost do
       ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params)
       expect(Topic.count).to eq(topic_count + 2)
     end
+
+    it 'works when mixing emails and usernames' do
+      SiteSetting.enable_staged_users = true
+      topic_count = Topic.count
+
+      ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge(target_emails: 'test@test.com'))
+      
+      expect(Topic.count).to eq(topic_count + 3)
+    end
+
+    it 'works when only using emails' do
+      SiteSetting.enable_staged_users = true
+      topic_count = Topic.count
+
+      ::Jobs::BccPost.new.execute(
+        user_id: sender.id, 
+        create_params: create_params.merge(
+          target_usernames: nil, 
+          target_emails: 'test@test.com,test2@test.com'
+        )
+      )
+      
+      expect(Topic.count).to eq(topic_count + 2)
+    end
   end
 
 end
