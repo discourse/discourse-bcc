@@ -7,11 +7,13 @@ export default Component.extend({
   bccAvailable: computed(
     "creatingPrivateMessage",
     "targetRecipients",
+    "targetGroups",
     function() {
       return (
         this.currentUser.staff &&
         this.creatingPrivateMessage &&
-        (this.targetRecipients || "").split(",").length > 1
+        ((this.targetRecipients || "").split(",").length > 1 ||
+          this.targetGroups)
       );
     }
   )
