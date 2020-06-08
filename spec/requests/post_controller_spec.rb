@@ -7,7 +7,7 @@ describe PostsController do
     {
       raw: 'hello',
       title: 'cool title',
-      target_usernames: 'evil,trout',
+      target_recipients: 'evil,trout',
       archetype: Archetype.private_message
     }
   end
@@ -43,7 +43,7 @@ describe PostsController do
     end
 
     it "returns an error if there aren't two usernames at least" do
-      post '/posts/bcc.json', params: create_params.merge(target_usernames: 'test')
+      post '/posts/bcc.json', params: create_params.merge(target_recipients: 'test')
       expect(Jobs::BccPost.jobs.length).to eq(0)
       expect(response.code).to eq('422')
       json = JSON.parse(response.body)
@@ -67,24 +67,41 @@ describe PostsController do
       expect(json['message']).to be_present
     end
 
-    it 'expands groups to users' do
-      group = Fabricate(:group, messageable_level: Group::ALIAS_LEVELS[:everyone])
-      user0 = Fabricate(:user)
-      user1 = Fabricate(:user)
-      user2 = Fabricate(:user)
+    describe 'xxxxx' do
+      before do
+        @group = Fabricate(:group, messageable_level: Group::ALIAS_LEVELS[:everyone])
+        @user0 = Fabricate(:user)
+        @user1 = Fabricate(:user)
+        @user2 = Fabricate(:user)
 
-      GroupUser.create(group: group, user: moderator)
-      GroupUser.create(group: group, user: user0)
-      GroupUser.create(group: group, user: user1)
+        GroupUser.create(group: @group, user: moderator)
+        GroupUser.create(group: @group, user: @user0)
+        GroupUser.create(group: @group, user: @user1)
+      end
 
-      post '/posts/bcc.json', params: create_params.merge(
-        target_usernames: "#{group.name},#{user2.username}"
-      )
-      expect(response.code).to eq('200')
-      job = Jobs::BccPost.jobs[0]
-      expect(job).to be_present
-      usernames = job['args'].first['create_params']['target_usernames'].split(',')
-      expect(usernames).to match_array([user0.username, user1.username, user2.username])
+      it 'expands groups to users' do
+        post '/posts/bcc.json', params: create_params.merge(
+          target_recipients: "#{@group.name},#{@user2.username}"
+        )
+        expect(response.code).to eq('200')
+        job = Jobs::BccPost.jobs[0]
+        expect(job).to be_present
+        usernames = job['args'].first['create_params']['target_usernames'].split(',')
+        expect(usernames).to match_array([@user0.username, @user1.username, @user2.username])
+      end
+
+      it 'expects group names to be downcase' do
+        post '/posts/bcc.json', params: create_params.merge(
+          target_recipients: @group.name.upcase
+        )
+
+        expect(response.code).to eq('200')
+        job = Jobs::BccPost.jobs[0]
+        expect(job).to be_present
+        usernames = job['args'].first['create_params']['target_usernames'].split(',')
+        expect(usernames).to match_array([@user0.username, @user1.username])
+      end
     end
+
   end
 end
