@@ -12,7 +12,7 @@ export default Component.extend({
       return (
         this.currentUser.staff &&
         this.creatingPrivateMessage &&
-        ((this.targetRecipients || "").split(",").length > 1 ||
+        ((this.targetRecipients || "").split(",").filter(Boolean).length > 1 ||
           this.targetGroups)
       );
     }

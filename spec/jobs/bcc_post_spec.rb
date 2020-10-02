@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 describe ::Jobs::BccPost do
-
   fab!(:sender) { Fabricate(:moderator) }
   fab!(:user0) { Fabricate(:user) }
   fab!(:user1) { Fabricate(:user) }
@@ -37,7 +36,7 @@ describe ::Jobs::BccPost do
       topic_count = Topic.count
 
       ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge(target_emails: 'test@test.com'))
-      
+
       expect(Topic.count).to eq(topic_count + 3)
     end
 
@@ -46,15 +45,14 @@ describe ::Jobs::BccPost do
       topic_count = Topic.count
 
       ::Jobs::BccPost.new.execute(
-        user_id: sender.id, 
+        user_id: sender.id,
         create_params: create_params.merge(
-          target_usernames: nil, 
+          target_usernames: nil,
           target_emails: 'test@test.com,test2@test.com'
         )
       )
-      
+
       expect(Topic.count).to eq(topic_count + 2)
     end
   end
-
 end
