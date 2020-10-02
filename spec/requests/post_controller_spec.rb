@@ -102,6 +102,5 @@ describe PostsController do
         expect(usernames).to match_array([@user0.username, @user1.username])
       end
     end
-
   end
 end
