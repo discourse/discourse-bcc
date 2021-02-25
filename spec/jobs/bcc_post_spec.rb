@@ -54,5 +54,16 @@ describe ::Jobs::BccPost do
 
       expect(Topic.count).to eq(topic_count + 2)
     end
+    
+    it 'works with personalization' do
+      edited_params = create_params
+      edited[:raw] += " to {username}"
+      ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: edited)
+      
+      expect(Post.find_by({topic_id: Topic.count-1}).raw[
+        -user1.username.length, user1.username.length
+        ]).to eq(user1.username)
+    end  
+      
   end
 end
