@@ -55,15 +55,12 @@ describe ::Jobs::BccPost do
       expect(Topic.count).to eq(topic_count + 2)
     end
     
-    it 'works with personalization' do
-      edited_params = create_params
-      edited[:raw] += " to {username}"
-      ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: edited)
+    it 'works with username and email personalization' do
+      topic_count = Topic.count
+      ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge("raw": "this is the content I want to send to {username}", target_emails: 'test@test.com'))
       
-      expect(Post.find_by({topic_id: Topic.count-1}).raw[
-        -user1.username.length, user1.username.length
-        ]).to eq(user1.username)
-    end  
+      expect(Topic.count).to eq(topic_count + 3)
+    end 
       
   end
 end
