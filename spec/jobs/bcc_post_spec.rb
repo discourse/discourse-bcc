@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "rails_helper"
+
 describe ::Jobs::BccPost do
   fab!(:sender) { Fabricate(:moderator) }
   fab!(:user0) { Fabricate(:user) }
@@ -57,6 +59,7 @@ describe ::Jobs::BccPost do
     
     it 'works with username and email personalization' do
       topic_count = Topic.count
+
       ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge("raw": "this is the content I want to send to {username}", target_emails: 'test@test.com'))
       
       expect(Topic.count).to eq(topic_count + 3)
