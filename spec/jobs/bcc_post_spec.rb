@@ -58,12 +58,13 @@ describe ::Jobs::BccPost do
     end
     
     it 'works with username and email personalization' do
-      topic_count = Topic.count
 
       ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge("raw": "this is the content I want to send to {username}", target_emails: 'test@test.com'))
-      
-      expect(Topic.count).to eq(topic_count + 3)
-    end 
+
+      raw = Topic.last.excerpt
+
+      expect(raw).to include(user0.username).or include(user1.username).or include("test@test.com")
+    end
       
   end
 end
