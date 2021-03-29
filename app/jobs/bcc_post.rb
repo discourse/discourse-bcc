@@ -21,9 +21,9 @@ class ::Jobs::BccPost < ::Jobs::Base
 
   def send_to(targets, targets_key, params, sender)
     targets.each do |target|
-      params["raw"] = params["raw"].gsub(/{username}/i, target)
-      params["raw"] = params["raw"].gsub(/{@username}/i, "@" + target)
-      creator = PostCreator.new(sender, params.merge(Hash[targets_key, target]))
+      temp_params = params["raw"].gsub(/{username}/i, target)
+      temp_params = temp_params.gsub(/{@username}/i, "@" + target)
+      creator = PostCreator.new(sender, temp_params.merge(Hash[targets_key, target]))
       creator.create
     end
   end
