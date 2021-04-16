@@ -59,7 +59,7 @@ describe ::Jobs::BccPost do
     
     it 'works with standard personalization' do
 
-      ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge("raw": "this is the content I want to send to {username}", target_emails: 'test@test.com'))
+      ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge("raw": "this is the content I want to send to %{username}", target_emails: 'test@test.com'))
 
       post = Post.find_by(raw: "this is the content I want to send to #{user0.username}")
 
@@ -68,7 +68,7 @@ describe ::Jobs::BccPost do
 
     it 'works with mention personalization' do
 
-      ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge("raw": "this is the content I want to send to {@username}", target_emails: 'test@test.com'))
+      ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge("raw": "this is the content I want to send to %{@username}", target_emails: 'test@test.com'))
 
       post = Post.find_by(raw: "this is the content I want to send to @#{user0.username}")
 
