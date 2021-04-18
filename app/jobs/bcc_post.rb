@@ -19,10 +19,15 @@ class ::Jobs::BccPost < ::Jobs::Base
 
   private
 
-  def send_to(targets, targets_key, params, sender, isUsername)
+  def send_to(targets, targets_key, params, sender)
     targets.each do |target|
+      temp_params = params
       temp_params["raw"] = temp_params["raw"].gsub(/%{username}/i, target)
       temp_params["raw"] = temp_params["raw"].gsub(/%{@username}/i, "@" + target)
+      user = User.find_by_username_or_email(target)
+      if !user.nil? then
+        temp_params["raw"] = temp_params["raw"].gsub(/%{name}/i, user.name)
+      end
       creator = PostCreator.new(sender, temp_params.merge(Hash[targets_key, target]))
       creator.create
     end
