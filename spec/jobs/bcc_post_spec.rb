@@ -56,7 +56,7 @@ describe ::Jobs::BccPost do
 
       expect(Topic.count).to eq(topic_count + 2)
     end
-    
+
     it 'works with standard personalization' do
 
       ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge("raw": "this is the content I want to send to %{username}", target_emails: 'test@test.com'))
@@ -64,7 +64,7 @@ describe ::Jobs::BccPost do
       post = Post.find_by(raw: "this is the content I want to send to #{user0.username}")
 
       expect(post).to_not be_nil
-    end 
+    end
 
     it 'works with mention personalization' do
 
@@ -73,12 +73,11 @@ describe ::Jobs::BccPost do
       post = Post.find_by(raw: "this is the content I want to send to @#{user0.username}")
 
       expect(post).to_not be_nil
-    end 
-      
+    end
 
     it 'works with name personalization' do
       ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge("raw": "this is the content I want to send to %{name}", target_emails: 'test@test.com'))
-     
+
       post = Post.find_by(raw: "this is the content I want to send to #{user0.name}")
 
       expect(post).to_not be_nil
