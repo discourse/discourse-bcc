@@ -83,6 +83,7 @@ describe PostsController do
         post '/posts/bcc.json', params: create_params.merge(
           target_recipients: "#{@group.name},#{@user2.username}"
         )
+
         expect(response.code).to eq('200')
         job = Jobs::BccPost.jobs[0]
         expect(job).to be_present
