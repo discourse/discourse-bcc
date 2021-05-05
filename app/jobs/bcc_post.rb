@@ -21,7 +21,7 @@ class ::Jobs::BccPost < ::Jobs::Base
 
   def send_to(targets, targets_key, params, sender)
     targets.each do |target|
-      temp_params = params
+      temp_params = params.clone
       temp_params["raw"] = temp_params["raw"].gsub(/%{username}/i, target)
       temp_params["raw"] = temp_params["raw"].gsub(/%{@username}/i, "@" + target)
       user = User.find_by_username_or_email(target)
