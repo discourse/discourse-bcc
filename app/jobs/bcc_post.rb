@@ -23,12 +23,12 @@ class ::Jobs::BccPost < ::Jobs::Base
     targets.each do |target|
       raw = params["raw"].gsub(/%{username}/i, target)
       raw.gsub!(/%{@username}/i, "@" + target)
-      
+
       user = User.find_by_username_or_email(target)
       if !user.nil? then
         raw.gsub!(/%{name}/i, user.name)
       end
-     
+
       creator = PostCreator.new(sender, params.merge(Hash[targets_key, target], raw: raw))
       creator.create
     end
