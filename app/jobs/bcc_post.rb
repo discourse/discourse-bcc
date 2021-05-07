@@ -26,9 +26,7 @@ class ::Jobs::BccPost < ::Jobs::Base
       temp_params["raw"] = temp_params["raw"].gsub(/%{@username}/i, "@" + target)
       user = User.find_by_username_or_email(target)
       if !user.nil? then
-        temp_params["raw"] = temp_params["raw"].gsub(/%{full_name}/i, user.name)
-        temp_params["raw"] = temp_params["raw"].gsub(/%{first_name}/i, user.name.split(" ")[0])
-        temp_params["raw"] = temp_params["raw"].gsub(/%{last_name}/i, user.name.split(" ", 2)[1])
+        temp_params["raw"] = temp_params["raw"].gsub(/%{name}/i, user.name)
       end
       creator = PostCreator.new(sender, temp_params.merge(Hash[targets_key, target]))
       creator.create

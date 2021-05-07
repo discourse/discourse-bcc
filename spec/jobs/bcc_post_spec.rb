@@ -71,25 +71,12 @@ describe ::Jobs::BccPost do
       expect(post).to_not be_nil
     end
 
-    it 'works with full name personalization' do
-      ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge("raw": "this is the content I want to send to %{full_name}", target_emails: 'test@test.com'))
+    it 'works with name personalization' do
+      ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge("raw": "this is the content I want to send to %{name}", target_emails: 'test@test.com'))
       post = Post.find_by(raw: "this is the content I want to send to #{user1.name}")
 
       expect(post).to_not be_nil
     end
 
-    it 'works with first name personalization' do
-      ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge("raw": "this is the content I want to send to %{first_name}", target_emails: 'test@test.com'))
-      post = Post.find_by(raw: "this is the content I want to send to #{user1.name.split(" ")[0]}")
-
-      expect(post).to_not be_nil
-    end
-
-    it 'works with last name personalization' do
-      ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge("raw": "this is the content I want to send to %{last_name}", target_emails: 'test@test.com'))
-      post = Post.find_by(raw: "this is the content I want to send to #{user1.name.split(" ", 2)[1]}")
-
-      expect(post).to_not be_nil
-    end
   end
 end
