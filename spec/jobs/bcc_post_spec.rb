@@ -33,6 +33,11 @@ describe ::Jobs::BccPost do
       expect(Topic.count).to eq(topic_count + 2)
     end
 
+    it "is not crashing when user.name is nil" do
+      user0.update_columns(name: nil)
+      expect { ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params) }.not_to raise_error
+    end
+
     it 'works when mixing emails and usernames' do
       SiteSetting.enable_staged_users = true
       topic_count = Topic.count
