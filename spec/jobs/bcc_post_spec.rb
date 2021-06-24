@@ -34,7 +34,7 @@ describe ::Jobs::BccPost do
     end
 
     it "does not crash when user's name is empty" do
-      user0.update_columns(name: nil)
+      user0.update!(name: nil)
       expect { ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params) }.not_to raise_error
     end
 
