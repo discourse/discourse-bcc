@@ -26,7 +26,7 @@ class ::Jobs::BccPost < ::Jobs::Base
 
       user = User.find_by_username_or_email(target)
 
-      if user && user.name
+      if user&.name
         raw.gsub!(/%{name}/i, user.name)
       end
 
