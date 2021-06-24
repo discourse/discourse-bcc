@@ -33,7 +33,7 @@ describe ::Jobs::BccPost do
       expect(Topic.count).to eq(topic_count + 2)
     end
 
-    it "is not crashing when user.name is nil" do
+    it "does not crash when user's name is empty" do
       user0.update_columns(name: nil)
       expect { ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params) }.not_to raise_error
     end
