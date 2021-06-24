@@ -25,7 +25,8 @@ class ::Jobs::BccPost < ::Jobs::Base
       raw.gsub!(/%{@username}/i, "@" + target)
 
       user = User.find_by_username_or_email(target)
-      if !user.nil? then
+
+      if user&.name
         raw.gsub!(/%{name}/i, user.name)
       end
 
