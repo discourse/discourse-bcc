@@ -9,7 +9,7 @@ componentTest("it doesn't show up by default", {
   },
   test(assert) {
     assert.ok(find(".bcc-checkbox").length === 0);
-  }
+  },
 });
 
 componentTest("doesn't show up for non-staff", {
@@ -17,7 +17,7 @@ componentTest("doesn't show up for non-staff", {
 
   async test(assert) {
     assert.ok(find(".bcc-checkbox").length === 0);
-  }
+  },
 });
 
 componentTest("it shows up if a private message with at least 1 username", {
@@ -34,5 +34,5 @@ componentTest("it shows up if a private message with at least 1 username", {
     assert.ok(find(".bcc-checkbox input[type=checkbox]").length === 1);
     await click(".bcc-checkbox input[type=checkbox]");
     assert.ok(this.get("changeMe"));
-  }
+  },
 });
