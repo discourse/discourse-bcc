@@ -5,3 +5,9 @@
 # https://translate.discourse.org/
 
 sv:
+  site_settings:
+    bcc_enabled: "Tillåt att enskilda personliga meddelanden skickas till många mottagare samtidigt"
+  bcc:
+    too_few_users: "Du måste skicka det personliga meddelandet till minst två deltagare"
+    pm_required: "Du kan bara använda denna slutpunkt för privata meddelanden"
+    messages_queued: "Dina personliga meddelanden skickas för närvarande. Om det finns många kan det ta lite tid att slutföra."

@@ -5,3 +5,6 @@
 # https://translate.discourse.org/
 
 he:
+  js:
+    discourse_bcc:
+      use_bcc: "שליחת הודעה אישית פרטית לכל אחד מהמשתתפים"
