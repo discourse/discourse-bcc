@@ -48,7 +48,9 @@ after_initialize do
       end
     end
 
-    if usernames.size < 2
+    emails = Set.new((@manager_params[:target_emails] || '').split(','))
+
+    if (usernames.size + emails.size) < 2
       return render_bcc(status: false) { |result| result.add_error(I18n.t("bcc.too_few_users")) }
     end
 

@@ -67,6 +67,15 @@ describe PostsController do
       expect(json['message']).to be_present
     end
 
+    it "succeeds with email addresses" do
+      post '/posts/bcc.json', params: create_params.merge(target_recipients: 'evil@example.com,trout@example.com')
+      expect(Jobs::BccPost.jobs.length).to eq(1)
+      expect(response.code).to eq('200')
+      json = JSON.parse(response.body)
+      expect(json['route_to']).to be_present
+      expect(json['message']).to be_present
+    end
+
     describe 'xxxxx' do
       before do
         @group = Fabricate(:group, messageable_level: Group::ALIAS_LEVELS[:everyone])
