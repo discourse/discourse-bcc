@@ -31,6 +31,23 @@ after_initialize do
           status: result.success? ? 200 : 422
         )
       end
+
+      def batch_targets(targets, targets_key)
+        targets = targets.to_a
+        batch_start = 0
+        batch_end = DiscourseBCC::BATCH_SIZE - 1
+        while batch_start <= targets.size && targets.size > 0
+          Jobs.enqueue(
+            :bcc_post,
+            user_id: current_user.id,
+            create_params: @manager_params,
+            targets_key: targets_key,
+            targets: targets[batch_start..batch_end]
+          )
+          batch_start += DiscourseBCC::BATCH_SIZE
+          batch_end += DiscourseBCC::BATCH_SIZE
+        end
+      end
     end
   end
 
@@ -66,38 +83,12 @@ after_initialize do
       return render_bcc(status: false) { |result| result.add_error(post.errors[:raw]) }
     end
 
+    @manager_params.except(:target_users, :target_group_names, :target_emails)
+
     # Queue up jobs in batches so that when sending hundreds or thousands of emails we
     # can take advantage of multiple workers
-    batch_start = 0
-    batch_end = DiscourseBCC::BATCH_SIZE - 1
-    @manager_params.except(:target_users, :target_group_names, :target_emails)
-    usernames = usernames.to_a
-    emails = emails.to_a
-    while batch_start <= usernames.size && usernames.size > 0
-      Jobs.enqueue(
-        :bcc_post,
-        user_id: current_user.id,
-        create_params: @manager_params,
-        targets_key: 'target_usernames',
-        targets: usernames[batch_start..batch_end]
-      )
-      batch_start += DiscourseBCC::BATCH_SIZE
-      batch_end += DiscourseBCC::BATCH_SIZE
-    end
-
-    batch_start = 0
-    batch_end = DiscourseBCC::BATCH_SIZE - 1
-    while batch_start <= emails.size && emails.size > 0
-      Jobs.enqueue(
-        :bcc_post,
-        user_id: current_user.id,
-        create_params: @manager_params,
-        targets_key: 'target_emails',
-        targets: emails[batch_start..batch_end]
-      )
-      batch_start += DiscourseBCC::BATCH_SIZE
-      batch_end += DiscourseBCC::BATCH_SIZE
-    end
+    batch_targets(usernames, 'target_usernames')
+    batch_targets(emails, 'target_emails')
 
     return render_bcc(status: true) do |result|
       result.route_to = "/u/#{current_user.username_lower}/messages/sent"
