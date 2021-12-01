@@ -6,13 +6,13 @@ describe ::Jobs::BccPost do
   fab!(:sender) { Fabricate(:moderator) }
   fab!(:user0) { Fabricate(:user) }
   fab!(:user1) { Fabricate(:user) }
+  let(:usernames) { [user0.username, user1.username] }
 
   let(:create_params) do
     HashWithIndifferentAccess.new(
       "raw" => "this is the content I want to send",
       "title" => "this is the title of the PM I want to send",
-      "archetype" => Archetype.private_message,
-      target_usernames: "#{user0.username},#{user1.username}"
+      "archetype" => Archetype.private_message
     )
   end
 
@@ -29,20 +29,42 @@ describe ::Jobs::BccPost do
 
     it "will send messages to each user" do
       topic_count = Topic.count
-      ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params)
+      ::Jobs::BccPost.new.execute(
+        user_id: sender.id,
+        create_params: create_params,
+        targets_key: 'target_usernames',
+        targets: [user0.username, user1.username]
+      )
       expect(Topic.count).to eq(topic_count + 2)
     end
 
     it "does not crash when user's name is empty" do
       user0.update!(name: nil)
-      expect { ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params) }.not_to raise_error
+      expect {
+        ::Jobs::BccPost.new.execute(
+          user_id: sender.id,
+          create_params: create_params,
+          targets_key: 'target_usernames',
+          targets: usernames)
+      }.not_to raise_error
     end
 
     it 'works when mixing emails and usernames' do
       SiteSetting.enable_staged_users = true
       topic_count = Topic.count
 
-      ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge(target_emails: 'test@test.com'))
+      ::Jobs::BccPost.new.execute(
+        user_id: sender.id,
+        create_params: create_params,
+        targets_key: 'target_usernames',
+        targets: [user0.username, user1.username])
+
+      ::Jobs::BccPost.new.execute(
+        user_id: sender.id,
+        create_params: create_params,
+        targets_key: 'target_emails',
+        targets: ['test@test.com']
+      )
 
       expect(Topic.count).to eq(topic_count + 3)
     end
@@ -53,31 +75,50 @@ describe ::Jobs::BccPost do
 
       ::Jobs::BccPost.new.execute(
         user_id: sender.id,
-        create_params: create_params.merge(
-          target_usernames: nil,
-          target_emails: 'test@test.com,test2@test.com'
-        )
+        create_params: create_params,
+        targets_key: 'target_emails',
+        targets: ['test@test.com', 'test2@test.com']
       )
 
       expect(Topic.count).to eq(topic_count + 2)
     end
 
     it 'works with standard personalization' do
-      ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge("raw": "this is the content I want to send to %{username}", target_emails: 'test@test.com'))
+      ::Jobs::BccPost.new.execute(
+        user_id: sender.id,
+        create_params: create_params.merge(
+          "raw": "this is the content I want to send to %{username}"
+        ),
+        targets_key: 'target_usernames',
+        targets: [user1.username])
       post = Post.find_by(raw: "this is the content I want to send to #{user1.username}")
 
       expect(post).to_not be_nil
     end
 
     it 'works with mention personalization' do
-      ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge("raw": "this is the content I want to send to %{@username}", target_emails: 'test@test.com'))
+      ::Jobs::BccPost.new.execute(
+        user_id: sender.id,
+        create_params: create_params.merge(
+          "raw": "this is the content I want to send to %{@username}"
+        ),
+        targets_key: 'target_usernames',
+        targets: [user1.username]
+      )
       post = Post.find_by(raw: "this is the content I want to send to @#{user1.username}")
 
       expect(post).to_not be_nil
     end
 
     it 'works with name personalization' do
-      ::Jobs::BccPost.new.execute(user_id: sender.id, create_params: create_params.merge("raw": "this is the content I want to send to %{name}", target_emails: 'test@test.com'))
+      ::Jobs::BccPost.new.execute(
+        user_id: sender.id,
+        create_params: create_params.merge(
+          "raw": "this is the content I want to send to %{name}"
+        ),
+        targets_key: 'target_usernames',
+        targets: [user1.username]
+      )
       post = Post.find_by(raw: "this is the content I want to send to #{user1.name}")
 
       expect(post).to_not be_nil

@@ -1,20 +1,21 @@
 # frozen_string_literal: true
 
 class ::Jobs::BccPost < ::Jobs::Base
+
+  sidekiq_options queue: 'low'
+
   def execute(args)
     return unless SiteSetting.bcc_enabled?
 
     sender = User.find_by(id: args[:user_id])
     return unless sender.present?
 
+    targets = args[:targets]
+    targets_key = args[:targets_key]
     create_params = args[:create_params]
     create_params[:skip_validations] = true
 
-    split_usernames = (create_params.delete(:target_usernames) || '').split(',')
-    split_emails = (create_params.delete(:target_emails) || '').split(',')
-
-    send_to(split_usernames, :target_usernames, create_params, sender)
-    send_to(split_emails, :target_emails, create_params, sender)
+    send_to(targets, targets_key, create_params, sender)
   end
 
   private
