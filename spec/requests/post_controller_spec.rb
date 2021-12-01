@@ -96,7 +96,7 @@ describe PostsController do
         expect(response.code).to eq('200')
         job = Jobs::BccPost.jobs[0]
         expect(job).to be_present
-        usernames = job['args'].first['create_params']['target_usernames'].split(',')
+        usernames = job['args'].first['targets']
         expect(usernames).to match_array([@user0.username, @user1.username, @user2.username])
       end
 
@@ -108,7 +108,7 @@ describe PostsController do
         expect(response.code).to eq('200')
         job = Jobs::BccPost.jobs[0]
         expect(job).to be_present
-        usernames = job['args'].first['create_params']['target_usernames'].split(',')
+        usernames = job['args'].first['targets']
         expect(usernames).to match_array([@user0.username, @user1.username])
       end
     end
