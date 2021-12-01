@@ -33,20 +33,15 @@ after_initialize do
       end
 
       def batch_targets(targets, targets_key)
-        targets = targets.to_a
-        batch_start = 0
-        batch_end = DiscourseBCC::BATCH_SIZE - 1
-        while batch_start <= targets.size && targets.size > 0
-          Jobs.enqueue(
-            :bcc_post,
-            user_id: current_user.id,
-            create_params: @manager_params,
-            targets_key: targets_key,
-            targets: targets[batch_start..batch_end]
-          )
-          batch_start += DiscourseBCC::BATCH_SIZE
-          batch_end += DiscourseBCC::BATCH_SIZE
-        end
+        targets.each_slice(DiscourseBBC::BATCH_SIZE) { |t|
+            Jobs.enqueue(
+              :bcc_post,
+              user_id: current_user.id,
+              create_params: @manager_params,
+              targets_key: targets_key,
+              targets: t
+            )
+          }
       end
     end
   end
