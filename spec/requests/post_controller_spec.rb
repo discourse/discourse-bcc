@@ -112,5 +112,33 @@ describe PostsController do
         expect(usernames).to match_array([@user0.username, @user1.username])
       end
     end
+
+    describe 'batching jobs' do
+      before do
+        @group = Fabricate(:group, messageable_level: Group::ALIAS_LEVELS[:everyone])
+        i = 0
+        while i < DiscourseBCC::BATCH_SIZE + 5
+          user = Fabricate(:user)
+          GroupUser.create(group: @group, user: user)
+          i += 1
+        end
+      end
+
+      it 'batches users based on batch size' do
+        post '/posts/bcc.json', params: create_params.merge(
+          target_recipients: "#{@group.name}"
+        )
+
+        expect(response.code).to eq('200')
+        job_batch_1 = Jobs::BccPost.jobs[0]
+        expect(job_batch_1).to be_present
+        job_batch_2 = Jobs::BccPost.jobs[1]
+        expect(job_batch_2).to be_present
+        usernames_batch_1 = job_batch_1['args'].first['targets']
+        usernames_batch_2 = job_batch_2['args'].first['targets']
+        expect(usernames_batch_1.size).to eq(DiscourseBCC::BATCH_SIZE)
+        expect(usernames_batch_2.size).to eq(5)
+      end
+    end
   end
 end
