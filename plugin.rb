@@ -33,15 +33,15 @@ after_initialize do
       end
 
       def batch_targets(targets, targets_key)
-        targets.each_slice(DiscourseBBC::BATCH_SIZE) { |t|
-            Jobs.enqueue(
-              :bcc_post,
-              user_id: current_user.id,
-              create_params: @manager_params,
-              targets_key: targets_key,
-              targets: t
-            )
-          }
+        targets.each_slice(DiscourseBCC::BATCH_SIZE) do |t|
+          Jobs.enqueue(
+            :bcc_post,
+            user_id: current_user.id,
+            create_params: @manager_params,
+            targets_key: targets_key,
+            targets: t
+          )
+        end
       end
     end
   end
