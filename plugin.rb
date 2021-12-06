@@ -78,7 +78,7 @@ after_initialize do
       return render_bcc(status: false) { |result| result.add_error(post.errors[:raw]) }
     end
 
-    @manager_params.except(:target_users, :target_group_names, :target_emails)
+    @manager_params.except!(:target_users, :target_group_names, :target_emails)
 
     # Queue up jobs in batches so that when sending hundreds or thousands of emails we
     # can take advantage of multiple workers
