@@ -5,3 +5,6 @@
 # https://translate.discourse.org/
 
 ru:
+  js:
+    discourse_bcc:
+      use_bcc: "Отправить личное сообщение каждому получателю"
