@@ -136,6 +136,10 @@ describe PostsController do
         expect(job_batch_2).to be_present
         usernames_batch_1 = job_batch_1['args'].first['targets']
         usernames_batch_2 = job_batch_2['args'].first['targets']
+        create_params = job_batch_2['args'].first['create_params']
+        expect(create_params.key?('target_group_names')).to eq(false)
+        expect(create_params.key?('target_users')).to eq(false)
+        expect(create_params.key?('target_emails')).to eq(false)
         expect(usernames_batch_1.size).to eq(DiscourseBCC::BATCH_SIZE)
         expect(usernames_batch_2.size).to eq(5)
       end
