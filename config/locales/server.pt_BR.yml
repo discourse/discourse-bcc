@@ -5,3 +5,9 @@
 # https://translate.discourse.org/
 
 pt_BR:
+  site_settings:
+    bcc_enabled: "Permitir mensagens pessoais individuais serem enviadas para vários destinatários ao mesmo tempo"
+  bcc:
+    too_few_users: "Você deve enviar a mensagem pessoal a pelo menos dois participantes"
+    pm_required: "Você só pode usar este ponto de extremidade para mensagens privadas"
+    messages_queued: "Suas mensagens privadas estão sendo enviadas. Se houver muitas, isso pode demorar alguns minutos para terminar."

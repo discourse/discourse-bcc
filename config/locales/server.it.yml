@@ -5,3 +5,9 @@
 # https://translate.discourse.org/
 
 it:
+  site_settings:
+    bcc_enabled: "Consenti l'invio simultaneo di messaggi personali distinti a più destinatari"
+  bcc:
+    too_few_users: "Devi inviare il messaggio personale ad almeno due partecipanti"
+    pm_required: "Puoi utilizzare questo endpoint solo per i messaggi privati"
+    messages_queued: "I tuoi messaggi personali sono attualmente in fase di invio. Se ce ne sono molti, il completamento dell'operazione richiederà un po' di tempo."

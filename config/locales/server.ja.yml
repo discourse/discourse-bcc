@@ -5,3 +5,9 @@
 # https://translate.discourse.org/
 
 ja:
+  site_settings:
+    bcc_enabled: "複数の受信者に個別の個人メッセージを同時に送信することを許可する"
+  bcc:
+    too_few_users: "少なくとも 2 人の参加者に個人メッセージを送信する必要があります"
+    pm_required: "このエンドポイントはプライベートメッセージにのみ使用できます"
+    messages_queued: "現在、個人メッセージを送信中です。数が多い場合、完了するまでにしばらく時間が掛かる場合があります。"

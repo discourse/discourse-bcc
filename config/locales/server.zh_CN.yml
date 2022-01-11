@@ -5,3 +5,9 @@
 # https://translate.discourse.org/
 
 zh_CN:
+  site_settings:
+    bcc_enabled: "允许将个人消息同时发送给多个收件人"
+  bcc:
+    too_few_users: "您必须将个人消息发送给至少两位参与者"
+    pm_required: "您只能将此端点用于私信"
+    messages_queued: "您的个人消息正在发送。如果消息较多，可能需要一段时间才能完成。"

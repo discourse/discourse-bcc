@@ -5,3 +5,6 @@
 # https://translate.discourse.org/
 
 de:
+  js:
+    discourse_bcc:
+      use_bcc: "Sende jedem Empfänger eine individuelle persönliche Nachricht"
