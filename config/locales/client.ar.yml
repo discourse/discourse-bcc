@@ -5,3 +5,6 @@
 # https://translate.discourse.org/
 
 ar:
+  js:
+    discourse_bcc:
+      use_bcc: "إرسال رسالة شخصية فردية إلى كل مستلم"
