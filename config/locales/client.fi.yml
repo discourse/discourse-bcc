@@ -5,3 +5,6 @@
 # https://translate.discourse.org/
 
 fi:
+  js:
+    discourse_bcc:
+      use_bcc: "Lähetä jokaiselle vastaanottajalle henkilökohtainen viesti"

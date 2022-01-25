@@ -5,3 +5,9 @@
 # https://translate.discourse.org/
 
 fi:
+  site_settings:
+    bcc_enabled: "Salli henkilökohtaisten viestien lähettäminen useille vastaanottajille samanaikaisesti"
+  bcc:
+    too_few_users: "Sinun täytyy lähettää henkilökohtainen viesti vähintään kahdelle osallistujalle"
+    pm_required: "Voit käyttää tätä päätepistettä vain yksityisviesteille"
+    messages_queued: "Henkilökohtaisia viestejäsi lähetetään parhaillaan. Jos niitä on useita, tämä saattaa kestää jonkin aikaa."
