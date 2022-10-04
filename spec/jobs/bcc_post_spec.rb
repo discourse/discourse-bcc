@@ -25,6 +25,7 @@ describe ::Jobs::BccPost do
   context "when enabled" do
     before do
       SiteSetting.bcc_enabled = true
+      Group.refresh_automatic_groups!
     end
 
     it "will send messages to each user" do
