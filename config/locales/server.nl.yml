@@ -5,3 +5,9 @@
 # https://translate.discourse.org/
 
 nl:
+  site_settings:
+    bcc_enabled: "Toestaan dat individuele privéberichten tegelijk naar veel ontvangers worden gestuurd"
+  bcc:
+    too_few_users: "Je moet het privébericht naar minimaal twee deelnemers sturen"
+    pm_required: "Je kunt dit eindpunt alleen gebruiken voor privéberichten"
+    messages_queued: "Je privéberichten worden momenteel gestuurd. Als het er veel zijn, kan het even duren voordat het klaar is."
