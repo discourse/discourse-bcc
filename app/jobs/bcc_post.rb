@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class ::Jobs::BccPost < ::Jobs::Base
-
-  sidekiq_options queue: 'low'
+  sidekiq_options queue: "low"
 
   def execute(args)
     return unless SiteSetting.bcc_enabled?
@@ -27,9 +26,7 @@ class ::Jobs::BccPost < ::Jobs::Base
 
       user = User.find_by_username_or_email(target)
 
-      if user&.name
-        raw.gsub!(/%{name}/i, user.name)
-      end
+      raw.gsub!(/%{name}/i, user.name) if user&.name
 
       creator = PostCreator.new(sender, params.merge(Hash[targets_key, target], raw: raw))
       creator.create

@@ -16,19 +16,20 @@ after_initialize do
   end
 
   Discourse::Application.routes.append do
-    post '/posts/bcc' => 'posts#bcc', constraints: StaffConstraint.new
+    post "/posts/bcc" => "posts#bcc", :constraints => StaffConstraint.new
   end
 
   # add_to_class doesn't support blocks
   reloadable_patch do
     class ::PostsController < ApplicationController
       protected
+
       def render_bcc(status:)
         result = NewPostResult.new(:bcc, status)
         yield result if block_given?
         render(
           json: serialize_data(result, NewPostResultSerializer, root: false),
-          status: result.success? ? 200 : 422
+          status: result.success? ? 200 : 422,
         )
       end
 
@@ -39,7 +40,7 @@ after_initialize do
             user_id: current_user.id,
             create_params: @manager_params,
             targets_key: targets_key,
-            targets: t
+            targets: t,
           )
         end
       end
@@ -53,18 +54,21 @@ after_initialize do
       return render_bcc(status: false) { |result| result.add_error(I18n.t("bcc.pm_required")) }
     end
 
-    usernames = Set.new((@manager_params[:target_usernames] || '').split(','))
+    usernames = Set.new((@manager_params[:target_usernames] || "").split(","))
 
     # Expand any groups
-    group_names = Set.new((@manager_params[:target_group_names] || '').split(','))
+    group_names = Set.new((@manager_params[:target_group_names] || "").split(","))
 
-    Group.where('lower(name) in (?)', group_names).includes(group_users: :user).each do |g|
-      g.group_users.each do |gu|
-        usernames << gu.user.username unless gu.user_id == current_user.id
+    Group
+      .where("lower(name) in (?)", group_names)
+      .includes(group_users: :user)
+      .each do |g|
+        g.group_users.each do |gu|
+          usernames << gu.user.username unless gu.user_id == current_user.id
+        end
       end
-    end
 
-    emails = Set.new((@manager_params[:target_emails] || '').split(','))
+    emails = Set.new((@manager_params[:target_emails] || "").split(","))
 
     if (usernames.size + emails.size) < 2
       return render_bcc(status: false) { |result| result.add_error(I18n.t("bcc.too_few_users")) }
@@ -82,12 +86,14 @@ after_initialize do
 
     # Queue up jobs in batches so that when sending hundreds or thousands of emails we
     # can take advantage of multiple workers
-    batch_targets(usernames, 'target_usernames')
-    batch_targets(emails, 'target_emails')
+    batch_targets(usernames, "target_usernames")
+    batch_targets(emails, "target_emails")
 
-    return render_bcc(status: true) do |result|
-      result.route_to = "/u/#{current_user.username_lower}/messages/sent"
-      result.message = I18n.t("bcc.messages_queued")
-    end
+    return(
+      render_bcc(status: true) do |result|
+        result.route_to = "/u/#{current_user.username_lower}/messages/sent"
+        result.message = I18n.t("bcc.messages_queued")
+      end
+    )
   end
 end
