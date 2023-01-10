@@ -5,3 +5,9 @@
 # https://translate.discourse.org/
 
 tr_TR:
+  site_settings:
+    bcc_enabled: "Bireysel kişisel mesajların aynı anda birçok alıcıya gönderilmesine izin verin"
+  bcc:
+    too_few_users: "Kişisel mesajı en az iki katılımcıya göndermelisiniz"
+    pm_required: "Bu uç noktayı yalnızca özel mesajlar için kullanabilirsiniz"
+    messages_queued: "Kişisel mesajlarınız şu anda gönderiliyor. Çok sayıda mesaj varsa tamamlanması biraz zaman alabilir."
