@@ -5,3 +5,9 @@
 # https://translate.discourse.org/
 
 pl_PL:
+  site_settings:
+    bcc_enabled: "Zezwalaj na wysyłanie indywidualnych wiadomości osobistych do wielu odbiorców jednocześnie"
+  bcc:
+    too_few_users: "Wiadomość osobistą należy wysłać do co najmniej dwóch uczestników"
+    pm_required: "Możesz używać tego punktu końcowego tylko do prywatnych wiadomości"
+    messages_queued: "Twoje osobiste wiadomości są obecnie wysyłane. Jeśli jest ich wiele, ukończenie może zająć trochę czasu."
