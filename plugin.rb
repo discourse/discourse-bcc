@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 # name: discourse-bcc
-# about: Adds the ability to send separate PMs simultaneously
+# about: Allows staff users to send individual personal messages to several users at once.
+# meta_topic_id: 134721
 # version: 0.1
 # authors: Robin Ward
 # url: https://github.com/discourse/discourse-bcc
