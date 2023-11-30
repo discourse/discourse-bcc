@@ -1,4 +1,9 @@
 en:
+  admin_js:
+    admin:
+      site_settings:
+        categories:
+          discourse_bcc: "Discourse BCC"
   js:
     discourse_bcc:
       use_bcc: "Send an individual personal message to each recipient"
