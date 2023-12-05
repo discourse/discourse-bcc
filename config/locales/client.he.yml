@@ -5,6 +5,11 @@
 # https://translate.discourse.org/
 
 he:
+  admin_js:
+    admin:
+      site_settings:
+        categories:
+          discourse_bcc: "Discourse עותק מוסתר"
   js:
     discourse_bcc:
       use_bcc: "שליחת הודעה אישית פרטית לכל אחד מהמשתתפים"
