@@ -1,5 +1,5 @@
-import { ajax } from "discourse/lib/ajax";
 import { Result } from "discourse/adapters/rest";
+import { ajax } from "discourse/lib/ajax";
 import { withPluginApi } from "discourse/lib/plugin-api";
 
 export default {
