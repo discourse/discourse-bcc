@@ -1,13 +1,13 @@
+import { click } from "@ember/test-helpers";
+import hbs from "htmlbars-inline-precompile";
+import componentTest, {
+  setupRenderingTest,
+} from "discourse/tests/helpers/component-test";
 import {
   count,
   discourseModule,
   exists,
 } from "discourse/tests/helpers/qunit-helpers";
-import { click } from "@ember/test-helpers";
-import componentTest, {
-  setupRenderingTest,
-} from "discourse/tests/helpers/component-test";
-import hbs from "htmlbars-inline-precompile";
 
 discourseModule("Integration | Component | bcc-checkbox", function (hooks) {
   setupRenderingTest(hooks);
