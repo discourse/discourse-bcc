@@ -5,6 +5,11 @@
 # https://translate.discourse.org/
 
 it:
+  admin_js:
+    admin:
+      site_settings:
+        categories:
+          discourse_bcc: "CCN Discourse"
   js:
     discourse_bcc:
       use_bcc: "Invia un messaggio personale distinto a ciascun destinatario"

@@ -5,6 +5,11 @@
 # https://translate.discourse.org/
 
 de:
+  admin_js:
+    admin:
+      site_settings:
+        categories:
+          discourse_bcc: "Discourse – BCC"
   js:
     discourse_bcc:
       use_bcc: "Sende jedem Empfänger eine individuelle persönliche Nachricht"
