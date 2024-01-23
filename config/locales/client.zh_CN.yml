@@ -5,6 +5,11 @@
 # https://translate.discourse.org/
 
 zh_CN:
+  admin_js:
+    admin:
+      site_settings:
+        categories:
+          discourse_bcc: "Discourse BCC"
   js:
     discourse_bcc:
       use_bcc: "向每个收件人分别发送个人消息"

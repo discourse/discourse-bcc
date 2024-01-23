@@ -5,6 +5,11 @@
 # https://translate.discourse.org/
 
 ar:
+  admin_js:
+    admin:
+      site_settings:
+        categories:
+          discourse_bcc: "Discourse BCC"
   js:
     discourse_bcc:
       use_bcc: "إرسال رسالة شخصية فردية إلى كل مستلم"
