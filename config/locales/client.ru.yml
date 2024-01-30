@@ -9,7 +9,7 @@ ru:
     admin:
       site_settings:
         categories:
-          discourse_bcc: "Discourse для BCC"
+          discourse_bcc: "Плагин Discourse «Скрытая копия»"
   js:
     discourse_bcc:
       use_bcc: "Отправить личное сообщение каждому получателю"
