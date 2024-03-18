@@ -5,9 +5,7 @@ class ::Jobs::BccPost < ::Jobs::Base
 
   def execute(args)
     return unless SiteSetting.bcc_enabled?
-
-    sender = User.find_by(id: args[:user_id])
-    return unless sender.present?
+    return unless sender = User.find_by(id: args[:user_id])
 
     targets = args[:targets]
     targets_key = args[:targets_key]
@@ -21,15 +19,14 @@ class ::Jobs::BccPost < ::Jobs::Base
 
   def send_to(targets, targets_key, params, sender)
     targets.each do |target|
-      raw = params["raw"].gsub(/%{username}/i, target)
+      name = User.find_by_username_or_email(target)&.name
+
+      raw = params["raw"].dup
+      raw.gsub!(/%{username}/i, target)
       raw.gsub!(/%{@username}/i, "@" + target)
+      raw.gsub!(/%{name}/i, name) if name.present?
 
-      user = User.find_by_username_or_email(target)
-
-      raw.gsub!(/%{name}/i, user.name) if user&.name
-
-      creator = PostCreator.new(sender, params.merge(Hash[targets_key, target], raw: raw))
-      creator.create
+      PostCreator.new(sender, params.merge(Hash[targets_key, target], raw: raw)).create
     end
   end
 end
