@@ -26,7 +26,7 @@ describe PostsController do
   end
 
   context "when logged in as staff" do
-    fab!(:moderator) { Fabricate(:moderator) }
+    fab!(:moderator)
 
     before { sign_in(moderator) }
 
