@@ -11,6 +11,7 @@ enabled_site_setting :bcc_enabled
 
 after_initialize do
   require_relative "app/jobs/bcc_post"
+  require_relative "lib/posts_controller_extension"
 
   module ::DiscourseBCC
     BATCH_SIZE = 20
@@ -21,32 +22,7 @@ after_initialize do
   end
 
   # add_to_class doesn't support blocks
-  reloadable_patch do
-    class ::PostsController < ApplicationController
-      protected
-
-      def render_bcc(status:)
-        result = NewPostResult.new(:bcc, status)
-        yield result if block_given?
-        render(
-          json: serialize_data(result, NewPostResultSerializer, root: false),
-          status: result.success? ? 200 : 422,
-        )
-      end
-
-      def batch_targets(targets, targets_key)
-        targets.each_slice(DiscourseBCC::BATCH_SIZE) do |t|
-          Jobs.enqueue(
-            :bcc_post,
-            user_id: current_user.id,
-            create_params: @manager_params,
-            targets_key: targets_key,
-            targets: t,
-          )
-        end
-      end
-    end
-  end
+  reloadable_patch { ::PostsController.prepend(DiscourseBCC::PostsControllerExtension) }
 
   add_to_class(::PostsController, :bcc) do
     @manager_params = create_params
