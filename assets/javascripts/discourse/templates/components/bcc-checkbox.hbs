@@ -1,7 +1,7 @@
-{{#if bccAvailable}}
+{{#if this.bccAvailable}}
   <div class="bcc-checkbox">
     <label>
-      <Input @type="checkbox" @checked={{checked}} />
+      <Input @type="checkbox" @checked={{this.checked}} />
       {{i18n "discourse_bcc.use_bcc"}}
     </label>
   </div>
