@@ -1,9 +1,9 @@
 import Component from "@ember/component";
+import { tagName } from "@ember-decorators/component";
 import computed from "discourse-common/utils/decorators";
 
-export default Component.extend({
-  tagName: "",
-
+@tagName("")
+export default class BccCheckbox extends Component {
   @computed("creatingPrivateMessage", "targetRecipients", "targetGroups")
   bccAvailable() {
     return (
@@ -12,5 +12,5 @@ export default Component.extend({
       ((this.targetRecipients || "").split(",").filter(Boolean).length > 1 ||
         this.targetGroups)
     );
-  },
-});
+  }
+}
