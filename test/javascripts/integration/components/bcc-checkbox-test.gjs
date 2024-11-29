@@ -43,11 +43,11 @@ module("Integration | Component | bcc-checkbox", function (hooks) {
       />
     </template>);
 
-    assert.false(this.changeMe);
+    assert.false(testState.changeMe);
     assert.dom(".bcc-checkbox").exists();
     assert.dom(".bcc-checkbox input[type=checkbox]").exists();
 
     await click(".bcc-checkbox input[type=checkbox]");
-    assert.true(this.changeMe);
+    assert.true(testState.changeMe);
   });
 });
