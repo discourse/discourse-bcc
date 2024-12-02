@@ -14,23 +14,25 @@ export default {
     }
 
     withPluginApi("0.8.10", (api) => {
-      api.modifyClass("adapter:post", {
-        pluginId: "discourse-bcc",
-
-        createRecord(store, type, args) {
-          if (type === "post" && args.use_bcc) {
-            return ajax("/posts/bcc", {
-              method: "POST",
-              data: args,
-            }).then((json) => {
-              return new Result(json.post, json);
-            });
-          } else {
-            delete args.use_bcc;
-            return this._super(store, type, args);
+      api.modifyClass(
+        "adapter:post",
+        (Superclass) =>
+          class extends Superclass {
+            createRecord(store, type, args) {
+              if (type === "post" && args.use_bcc) {
+                return ajax("/posts/bcc", {
+                  method: "POST",
+                  data: args,
+                }).then((json) => {
+                  return new Result(json.post, json);
+                });
+              } else {
+                delete args.use_bcc;
+                return super.createRecord(store, type, args);
+              }
+            }
           }
-        },
-      });
+      );
     });
   },
 };
