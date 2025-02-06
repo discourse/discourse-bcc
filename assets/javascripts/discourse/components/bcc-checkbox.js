@@ -1,6 +1,6 @@
 import Component from "@ember/component";
 import { tagName } from "@ember-decorators/component";
-import computed from "discourse-common/utils/decorators";
+import computed from "discourse/lib/decorators";
 
 @tagName("")
 export default class BccCheckbox extends Component {
