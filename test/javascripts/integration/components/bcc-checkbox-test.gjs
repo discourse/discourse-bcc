@@ -16,12 +16,14 @@ module("Integration | Component | bcc-checkbox", function (hooks) {
   });
 
   test("doesn't show up for non-staff", async function (assert) {
-    await render(<template>
-      <BccCheckbox
-        @creatingPrivateMessage={{true}}
-        @targetRecipients="evil,trout"
-      />
-    </template>);
+    await render(
+      <template>
+        <BccCheckbox
+          @creatingPrivateMessage={{true}}
+          @targetRecipients="evil,trout"
+        />
+      </template>
+    );
 
     assert.dom(".bcc-checkbox").doesNotExist();
   });
@@ -35,13 +37,15 @@ module("Integration | Component | bcc-checkbox", function (hooks) {
 
     this.currentUser.set("moderator", true);
 
-    await render(<template>
-      <BccCheckbox
-        @checked={{testState.changeMe}}
-        @creatingPrivateMessage={{true}}
-        @targetRecipients="evil,trout"
-      />
-    </template>);
+    await render(
+      <template>
+        <BccCheckbox
+          @checked={{testState.changeMe}}
+          @creatingPrivateMessage={{true}}
+          @targetRecipients="evil,trout"
+        />
+      </template>
+    );
 
     assert.false(testState.changeMe);
     assert.dom(".bcc-checkbox").exists();
