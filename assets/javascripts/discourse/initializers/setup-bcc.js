@@ -13,7 +13,7 @@ export default {
       composer.class.serializeToDraft("use_bcc");
     }
 
-    withPluginApi("0.8.10", (api) => {
+    withPluginApi((api) => {
       api.modifyClass(
         "adapter:post",
         (Superclass) =>
