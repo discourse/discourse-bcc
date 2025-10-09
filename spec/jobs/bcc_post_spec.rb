@@ -3,9 +3,9 @@
 require "rails_helper"
 
 describe ::Jobs::BccPost do
-  fab!(:sender) { Fabricate(:moderator) }
-  fab!(:user0) { Fabricate(:user) }
-  fab!(:user1) { Fabricate(:user) }
+  fab!(:sender, :moderator)
+  fab!(:user0, :user)
+  fab!(:user1, :user)
   let(:usernames) { [user0.username, user1.username] }
 
   let(:create_params) do
