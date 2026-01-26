@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe ::Jobs::BccPost do
   fab!(:sender, :moderator)
   fab!(:user0, :user)
