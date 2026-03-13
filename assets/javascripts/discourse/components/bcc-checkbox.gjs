@@ -1,12 +1,13 @@
+/* eslint-disable ember/no-classic-components */
 import Component, { Input } from "@ember/component";
+import { computed } from "@ember/object";
 import { tagName } from "@ember-decorators/component";
-import computed from "discourse/lib/decorators";
 import { i18n } from "discourse-i18n";
 
 @tagName("")
 export default class BccCheckbox extends Component {
   @computed("creatingPrivateMessage", "targetRecipients", "targetGroups")
-  bccAvailable() {
+  get bccAvailable() {
     return (
       this.currentUser.staff &&
       this.creatingPrivateMessage &&
